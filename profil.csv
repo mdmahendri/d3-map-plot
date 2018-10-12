@@ -1,0 +1,35 @@
+id_prov,nama_prov,lambang_prov,ibukota_prov,luas_prov,hari_jadi
+1,ACEH,img/prov/Aceh.png,Banda Aceh,58375.63 km^2,7 Desember 1959
+2,BALI,img/prov/Bali.png,Denpasar,5636.66 km^2,14 Agustus 1959
+3,KEP. BANGKA BELITUNG,img/prov/Kepulauan_Bangka_Belitung.png,Pangkalpinang,"18725,14 km^2",21-Nov-00
+4,BANTEN,img/prov/Banten.png,Kota Serang,9160 km^2,4 Oktober 2000
+5,BENGKULU,img/prov/Bengkulu.png,Kota Bengkulu,19788.70 km^2,18-Nov-68
+6,GORONTALO,img/prov/Gorontalo.png,Gorontalo,12435 km^2,5 Desember 2000
+7,PAPUA BARAT,img/prov/Papua_Barat.png,Manokwari,99671.63 km^2,4 oktober 1999
+8,DKI JAKARTA,img/prov/DKI_Jakarta.png,Jakarta,7659 km^2,22 Juni 1527
+9,JAMBI,img/prov/Jambi.png,Kota Jambi,53435.72 km^2,25 Juni 1958
+10,JAWA BARAT,img/prov/Jawa_Barat.png,Bandung,35222.18 km^2,18 Agustus 1945
+11,JAWA TENGAH,img/prov/Jawa_Tengah.png,Kota Semarang,32548 km^2,15 Agustus 1950
+12,JAWA TIMUR,img/prov/Jawa_Timur.png,Kota Surabaya,47922 km^2,12 Oktober 1945
+13,KALIMANTAN BARAT,img/prov/Kalimantan_Barat.png,Pontianak,146807 km^2,1 Januari 1957
+14,KALIMANTAN SELATAN,img/prov/Kalimantan_Selatan.png,Banjarmasin,37530.52 km^2,14 agustus 1950
+15,KALIMANTAN TENGAH,img/prov/Kalimantan_Tengah.png,Palangka Raya,157893 km^2,23 Mei 1957
+16,KALIMANTAN TIMUR,img/prov/Kalimantan_Timur.png,Samarinda,129066.64 km^2,1 Januari 1957
+17,KALIMANTAN UTARA,img/prov/Kalimantan_Utara.png,Tanjung Selor,75467.70 km^2,25 Oktober 2012
+18,KEP. RIAU,img/prov/Kepulauan_Riau.png,Tanjungpinang,8201.72 km^2,24-Sep-02
+19,LAMPUNG,img/prov/Lampung.png,Bandar Lampung,35587 km^2,18 Maret 1964
+20,MALUKU UTARA,img/prov/Maluku_Utara.png,Sofifi,31982 km^2,4 Oktober 1999
+21,MALUKU,img/prov/Maluku.png,Ambon,705645 km^2,19 Agustus 1945
+22,NUSA TENGGARA BARAT,img/prov/Nusa_Tenggara_Barat.png,Mataram,20153.15 km^2,17 Desember 1958
+23,NUSA TENGGARA TIMUR,img/prov/Nusa_Tenggara_Timur.png,Kupang,48718.10 km^2,20 Desember 1958
+24,PAPUA,img/prov/Papua.png,Jayapura,309934.4 km^2,1 Mei 1963
+25,RIAU,img/prov/Riau.png,Pekanbaru,88672.67 km^2,9 Agustus 1957
+26,SULAWESI BARAT,img/prov/Sulawesi_Barat.png,Mamuju,16787.18 km^2,5 Oktober 2004
+27,SULAWESI SELATAN,img/prov/Sulawesi_Selatan.png,Makassar,45764.53 km^2,13 Desember 1960
+28,SULAWESI TENGAH,img/prov/Sulawesi_Tengah.png,Kota Palu,61841.29 km^2,13-Apr-64
+29,SULAWESI TENGGARA,img/prov/Sulawesi_Tenggara.png,Kota Kendari,38140 km^2,27-Apr-64
+30,SULAWESI UTARA,img/prov/Sulawesi_Utara.png,Manado,13851.64 km^2,14 Agustus 1959
+31,SUMATERA BARAT,img/prov/Sumatera_Barat.png,Padang,42297.30 km^2,
+32,SUMATERA SELATAN,img/prov/Sumatera_Selatan.png,Palembang,87917.41 km^2,15 Mei 1946
+33,SUMATERA UTARA,img/prov/Sumatera_Utara.png,Medan,728=981.23 km^2,15-Apr-48
+34,DI YOGYAKARTA,img/prov/Di_Yogyakarta.png,Kota Yogyakarta,3185.80 km^2,4 Maret 1950

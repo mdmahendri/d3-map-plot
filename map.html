@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mapping</title>
+
+	<script type="text/javascript" src="d3.min.js"></script>
+	<script type="text/javascript" src="topojson.min.js"></script>
+	<script type="text/javascript" src="d3-tip.js"></script>
+
+	<script type="text/javascript" src="persen.miskin.js"></script>
+	<script type="text/javascript" src="jenjang.pendidikan.js"></script>
+	<script type="text/javascript" src="kasus.penyakit.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="spectre.min.css">
+
+	<style type="text/css">
+
+		body {
+			background: #EEEEEE;
+			padding: 20px;
+		}
+
+		path.domain {
+			stroke: #E0E0E0;
+		}
+
+		.tile-content {
+			margin-bottom: 10px;
+		}
+
+		/* tip style */
+		.d3-tip {
+		  line-height: 1;
+		  padding: 12px;
+		  background: rgba(0, 0, 0, 0.8);
+		  color: #fff;
+		  border-radius: 2px;
+		  font-size: 10px;
+		}
+
+		/* Style northward tooltips differently */
+		.d3-tip.n:after {
+		  margin: -1px 0 0 0;
+		  top: 100%;
+		  left: 0;
+		}
+
+		.map-path {
+			stroke: white;
+		}
+
+		.selected-path {
+			fill: yellow;
+		}
+
+		.miskin-bar {
+			fill: #66BB6A;
+		}
+
+		.pendidikan-bar {
+			fill: #FFCA28;
+		}
+
+		.penyakit-bar {
+			fill: #7E57C2;
+		}
+
+		.miskin-bar.select {
+			fill: blue;
+		}
+
+		.icon {
+			width: 100px;
+			height: 100px;
+		}
+
+		.shadow {
+			box-shadow: 0 1px 20px 3px rgba(0,0,0,.1);
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="columns">
+			<div class="column col-4 col-mx-auto">
+				<br><br>
+				<div class="tile">
+				  <div class="tile-icon">
+					<img src="img/icon.svg" class="icon">
+				  </div>
+				  <div class="tile-content">
+				    <p class="tile-title h1">Grafik Ringkasan</p>
+				    <p class="tile-subtitle text-gray h3">Statistik Kependudukan</p>
+				  </div>
+				</div>
+			</div>
+			<div class="column col-3">
+				<div class="card shadow">
+				  <div class="card-image">
+					<svg id="miskin"></svg>
+				  </div>
+				  <div class="card-header">
+				    <div class="card-title h5">Grafik % Penduduk Miskin</div>
+				  </div>
+				  <div class="card-body">
+				    Data berasal dari periode tahun 2013 - 2015
+				  </div>
+				</div>
+			</div>
+
+			<div class="column col-3">
+				<div class="card shadow">
+					<div class="panel">
+		              <div class="panel-header text-center">
+		                <figure class="avatar avatar-lg">
+		                  <img id="prov-img" src="img/prov/Untitled.png" alt="Avatar">
+		                </figure>
+		                <div id="prov-nama" class="panel-title h5 mt-10">-</div>
+		              </div>
+		              <div class="panel-body">
+		                <div class="tile tile-centered">
+		                  <div class="tile-content">
+		                    <div class="tile-title">Ibukota</div>
+		                    <div id="prov-kota" class="tile-subtitle">-</div>
+		                  </div>
+		                  <div class="tile-action">
+		                    <button class="btn btn-link btn-action btn-lg"><i class="icon icon-edit"></i></button>
+		                  </div>
+		                </div>
+		                <div class="tile tile-centered">
+		                  <div class="tile-content">
+		                    <div class="tile-title">Luas</div>
+		                    <div id="prov-luas" class="tile-subtitle">-</div>
+		                  </div>
+		                  <div class="tile-action">
+		                    <button class="btn btn-link btn-action btn-lg"><i class="icon icon-edit"></i></button>
+		                  </div>
+		                </div>
+		                <div class="tile tile-centered">
+		                  <div class="tile-content">
+		                    <div class="tile-title">Hari Jadi</div>
+		                    <div id="prov-hari" class="tile-subtitle">-</div>
+		                  </div>
+		                  <div class="tile-action">
+		                    <button class="btn btn-link btn-action btn-lg"><i class="icon icon-edit"></i></button>
+		                  </div>
+		                </div>
+		              </div>
+		              <div class="panel-footer">
+		              	<button class="btn btn-primary btn-block">Website</button>
+		              </div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<br>
+
+		<div class="columns">
+
+			<div class="column col-3">
+				<div class="card shadow">
+				  <div class="card-image">
+					<svg id="pendidikan"></svg>
+				  </div>
+				  <div class="card-header">
+				    <div class="card-title h5">Angka Partisipasi Kasar</div>
+				  </div>
+				  <div class="card-body">
+				    Data berasal dari tahun 2015
+				  </div>
+				</div>
+			</div>
+			<div class="column col-6">
+				<div class="card shadow">
+				  <div class="card-image">
+				  	<div class="form-group" style="margin-left: 20px;">
+					  <label class="form-radio">
+					    <input type="radio" value="2015" name="group1" class="pilih-tahun" checked>
+					    <i class="form-icon"></i> 2015
+					  </label>
+					  <label class="form-radio">
+					    <input type="radio" value="2014" name="group1" class="pilih-tahun">
+					    <i class="form-icon"></i> 2014
+					  </label>
+					  <label class="form-radio">
+					    <input type="radio" value="2013" name="group1" class="pilih-tahun">
+					    <i class="form-icon"></i> 2013
+					  </label>
+					</div>
+					<svg id="map" width="600" height="400">
+						<g id="threshold" transform="translate(20,350)"></g>
+					</svg>
+				  </div>
+				  <div class="card-header">
+				    <div class="card-title h5">Peta Chloropeth Jumlah Penduduk Proyeksi</div>
+				  </div>
+				  <div class="card-body">
+				    Data berasal dari periode tahun 2013 - 2015
+				  </div>
+				</div>
+			</div>
+
+			<div class="column col-3">
+				<div class="card shadow">
+				  <div class="card-image">
+					<svg id="penyakit"></svg>
+				  </div>
+				  <div class="card-header">
+				    <div class="card-title h5">Grafik Kasus Penyakit</div>
+				  </div>
+				  <div class="card-body">
+				    Data berasal dari tahun 2015
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+
+		// variabel inisial
+		var rutaData = [],
+		miskinData = [],
+		penyakitData = [],
+		pendidikanData = [],
+		profileData = [];
+
+		var tahun = 2015;
+
+		// membuat tooltip untuk peta
+		var mapTip = d3.tip()
+				.attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function(d) {
+        	return 'Provinsi: ' + d.properties.NAME_1 + '<br/>'
+        	+ 'Jumlah Ruta (ribu) : ' + d.properties.jumlah_ruta;
+        });
+
+		// buat batas skema warna peta
+		var threshold = d3.scaleThreshold()
+		.domain([1900, 5000, 15000, 35000])
+		.range(['#B3E5FC', '#4FC3F7', '#03A9F4', '#0288D1', '#01579B']);
+
+		var xThreshold = d3.scaleLinear()
+		.range([0, 50000]);
+
+		// load topojson dan data
+		d3.queue()
+		.defer(d3.json, 'indo-quantized.json')
+		.defer(d3.csv, 'jumlah-ruta.csv', function(d) {
+			var index = d.id_prov - 1;
+			rutaData[index] = {
+				'th_2013' : d.rt_2013,
+				'th_2014' : d.rt_2014,
+				'th_2015' : d.rt_2015
+			}
+		})
+		.defer(d3.csv, 'persen-miskin.csv', function(d) {
+			var content = [];
+			for (var i = 1; i < 35; i++) {
+				var index = i - 1;
+				content[index] = d[i];
+			}
+			miskinData.push({
+				'tahun' : d.tahun,
+				'content' : content
+			});
+		})
+		.defer(d3.csv, 'kasus-penyakit-15.csv', function(d) {
+			var content = [];
+			for (var i = 1; i < 35; i++) {
+				var index = i - 1;
+				content[index] = d[i];
+			}
+			penyakitData.push({
+				'penyakit' : d.penyakit,
+				'content' : content
+			});
+		})
+		.defer(d3.csv, 'partisipasi-sekolah-15.csv', function(d) {
+			var content = [];
+			for (var i = 1; i < 35; i++) {
+				var index = i - 1;
+				content[index] = d[i];
+			}
+			pendidikanData.push({
+				'jenjang' : d.jenjang,
+				'content' : content
+			});
+		})
+		.defer(d3.csv, 'profil.csv', function(d) {
+			var index = d.id_prov - 1;
+			profileData[index] = {
+				'nama_prov' : d.nama_prov,
+				'lambang_prov' : d.lambang_prov,
+				'ibukota_prov' : d.ibukota_prov,
+				'luas_prov' : d.luas_prov,
+				'hari_jadi' : d.hari_jadi
+			}
+		})
+		.await(visualize);
+
+		function visualize(error, data) {
+
+			if (error) { throw error; }
+			console.log(miskinData);
+
+			// set max penduduk pada x threshold
+			xThreshold.domain([0, d3.max(rutaData, function(d) { return d.th_2015; })]);
+
+			// buat legend range ruta
+			var thresholdAxis = d3.axisBottom(xThreshold)
+			.tickSize(13)
+			.tickValues(threshold.domain());
+
+			var map_threshold = d3.select('#threshold').call(thresholdAxis);
+
+			map_threshold.selectAll('.rect-threshold')
+			.data(threshold.range().map(function(color) {
+				var d = threshold.invertExtent(color);
+				if (d[0] == null) d[0] = xThreshold.domain()[0];
+				if (d[1] == null) d[1] = xThreshold.domain()[1];
+				return d;
+			}))
+			.enter().insert("rect", ".tick")
+			.classed('rect-threshold', true)
+			.attr("height", 8)
+			.attr("x", function(d) { return xThreshold(d[0]); })
+			.attr("width", function(d) { return xThreshold(d[1]) - xThreshold(d[0]); })
+			.attr("fill", function(d) { return threshold(d[0]); });
+
+			map_threshold.append("text")
+			.attr("fill", "#000")
+			.attr("font-weight", "bold")
+			.attr("text-anchor", "start")
+			.attr("y", -6)
+			.text("Jumlah Penduduk (ribu jiwa)");
+
+			// load topo
+			const indoMap = topojson.feature(data, {
+				type: 'GeometryCollection',
+				geometries: data.objects.indo.geometries
+			});
+
+			// menggunakan proyeksi Mercator
+			const projection = d3.geoMercator()
+			.fitExtent([ [20,20], [600,400] ], indoMap);
+
+			// generate path
+			const geoPath = d3.geoPath()
+			.projection(projection);
+
+			// load map svg
+			var map = d3
+			.select('#map')
+			.call(mapTip);
+
+			// insert path
+			map.selectAll('.map-path')
+			.data(indoMap.features)
+			.enter().append('path')
+			.attr('class', 'map-path')
+			.attr('d', geoPath)
+			.attr('fill', function(d) {
+				var index = d.properties.ID_1 - 1;
+				d.properties.jumlah_ruta = rutaData[index].th_2015;
+				if (isNaN(d.properties.jumlah_ruta)) { return 'black'}
+				return threshold(d.properties.jumlah_ruta);
+			})
+			.on('click', function(d){
+				if (+tahun != 2015) {
+					alert('Maaf bar chart hanya tersedia tahun 2015');
+					return;
+				}
+
+				var current = d3.select(this);
+				if (current.classed('selected-path')) {
+					current.classed('selected-path', false);
+					//mengembalikan skema warna map
+					restoreMapColor(tahun);
+				} else {
+					d3.selectAll('.map-path')
+					.classed('selected-path', false)
+					.attr('fill', 'grey');
+					current.classed('selected-path', true);
+
+					//tampilkan profil provinsi
+					changeProvProfile(d.properties.ID_1);
+					//update chart lain
+					updateBarChart(d.properties.ID_1);
+				}
+			})
+			.on('mouseover', mapTip.show)
+			.on('mouseout', mapTip.hide);
+
+			showPersenMiskinChart();
+			showPendidikanChart();
+			showPenyakitChart();
+		}
+
+		function restoreMapColor(tahun) {
+			d3.select('#map').selectAll('.map-path')
+			.attr('fill', function(d) {
+				var index = d.properties.ID_1 - 1;
+				switch(tahun) {
+					case 2013:
+						d.properties.jumlah_ruta = rutaData[index].th_2013;
+						break;
+					case 2014:
+						d.properties.jumlah_ruta = rutaData[index].th_2014;
+						break;
+					case 2015:
+						d.properties.jumlah_ruta = rutaData[index].th_2015;
+						break;
+				}
+				return threshold(d.properties.jumlah_ruta);
+			})
+			.classed('selected-path', false);
+		}
+
+		d3.selectAll('.pilih-tahun')
+		.on('click', function() {
+			const pilihan = d3.select('input[name="group1"]:checked').node().value;
+			tahun = pilihan;
+			restoreMapColor(+pilihan);
+		});
+
+		function updateBarChart(idProv) {
+			var index = idProv - 1;
+			showPersenMiskinChart(index);
+			showPendidikanChart(index);
+			showPenyakitChart(index);
+		}
+
+		function changeProvProfile(idProv) {
+			var index = idProv - 1;
+			var data = profileData[index];
+			d3.select('#prov-img').attr('src',data.lambang_prov);
+			d3.select('#prov-nama').text(data.nama_prov);
+			d3.select('#prov-kota').text(data.ibukota_prov);
+			d3.select('#prov-luas').text(data.luas_prov);
+			d3.select('#prov-hari').text(data.hari_jadi);
+		}
+
+		function wrap (text, width) {
+
+		  text.each(function() {
+
+		    var breakChars = ['/', '&', '-'],
+		      text = d3.select(this),
+		      textContent = text.text(),
+		      spanContent;
+
+		    breakChars.forEach(char => {
+		      // Add a space after each break char for the function to use to determine line breaks
+		      textContent = textContent.replace(char, char + ' ');
+		    });
+
+		    var words = textContent.split(/\s+/).reverse(),
+		      word,
+		      line = [],
+		      lineNumber = 0,
+		      lineHeight = 1.1, // ems
+		      x = text.attr('x'),
+		      y = text.attr('y'),
+		      dy = parseFloat(text.attr('dy') || 0),
+		      tspan = text.text(null).append('tspan').attr('x', x).attr('y', y).attr('dy', dy + 'em');
+
+		    while (word = words.pop()) {
+		      line.push(word);
+		      tspan.text(line.join(' '));
+		      if (tspan.node().getComputedTextLength() > width) {
+		        line.pop();
+		        spanContent = line.join(' ');
+		        breakChars.forEach(char => {
+		          // Remove spaces trailing breakChars that were added above
+		          spanContent = spanContent.replace(char + ' ', char);
+		        });
+		        tspan.text(spanContent);
+		        line = [word];
+		        tspan = text.append('tspan').attr('x', x).attr('y', y).attr('dy', ++lineNumber * lineHeight + dy + 'em').text(word);
+		      }
+		    }
+		  });
+		}
+	</script>
+</body>
+</html>
